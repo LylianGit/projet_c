@@ -5,6 +5,11 @@
 #include <string.h>
 #include "../mylib/mylib.h"
 
+/* 
+*  Code qui teste les fonctions load et search
+*   load charge en mémoire une arborescence et search recherche une valeur dedans.
+*/
+
 struct Line {
        char tekst[50000];
        struct Line *next;
@@ -21,7 +26,8 @@ void search(struct Line* n, char * x);
 /* -------------------------------- */
 
 
-char * readFile(){
+char * readFile()  // Va lire dans tree.conf ce qu'il y a après le '='
+{                   // pour ensuite le mettre en paramètre de la fonction load
         FILE *f;
     f = fopen("tree.conf", "r");
  
@@ -36,11 +42,11 @@ char * readFile(){
       if(ch=='=')
         lire=1;
       if(lire==1){
-        fread(rootdir, sizeof(char), -1, f); // rootdir:variable, -1 pour aller jusqu'à la fin du fichier
+        fread(rootdir, sizeof(char), -1, f); // rootdir:variable, qui prend la valeur d'un char, -1 pour aller jusqu'à la fin du fichier, f:fichier
         }
     }
     //debug:
-    //printf("valeur::%s\ntaille:%d\n", rootdir, strlen(rootdir));
+      //printf("valeur::%s\ntaille:%d\n", rootdir, strlen(rootdir));
 
     fclose(f);
     return rootdir;
@@ -49,18 +55,22 @@ char * readFile(){
 
 
 int main(int argc, char *argv[]){
+  
+  //On vérifie que le nombre d'arguments est à 2:
 
   if (argc != 2) {
       fprintf(stderr, "Usage: ./program directory_name\n");
       exit(EXIT_FAILURE);
 
   }else{
-
     struct Line *lst = NULL;
-    load(readFile(), &lst);
-    //Pour vérifier que l'arborescence est bien enregistrée dans la structure:
+
+    load(readFile(), &lst); //On charge en mémoire
+
+    search(lst, argv[1]); //On recherche une entrée de répertoire
+
+        //Debug pour vérifier que l'arborescence est bien enregistrée dans la structure:
       //print(lst); 
-    search(lst, argv[1]);
   }
 }
 

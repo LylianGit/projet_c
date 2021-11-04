@@ -17,6 +17,3 @@ void print(struct Line* n);
 void add(struct Line** pp, const char *t);
 void search(struct Line* n, char * x);
 
-
-
-

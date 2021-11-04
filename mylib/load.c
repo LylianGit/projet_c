@@ -5,11 +5,15 @@
 #include <string.h>
 #include "mylib.h"
 
-
+/* 
+*  Code récursif qui parcours les dossiers et fichiers d'une arborescence choisi en paramètre 
+*   et sauvegarde leur chemin dans une structure mise en paramètre 
+*/
 
 int load(char rep[], struct Line **l){
-add(&(*l), rep);
-  DIR *dp;
+  
+  add(&(*l), rep); // on ajoute le texte mit en paramètre (dossier)
+  DIR *dp; 
   struct dirent *dirp;
   char *sousRep;
   dp = opendir(rep);
@@ -18,8 +22,10 @@ add(&(*l), rep);
      printf("répertoire introuvable ou manque de permission\n");
      return 1;
    }
-   
+   //Tant qu'il y a des fichiers/dossiers à lire :
    while((dirp = readdir(dp)) != NULL){
+
+     //Pour afficher le chemin complet et non pas seulement le nom du fichier:
 
       if (strcmp(dirp->d_name,".") != 0 && strcmp(dirp->d_name,"..") != 0){
 
@@ -27,15 +33,16 @@ add(&(*l), rep);
           rep = strcat(rep,"/");
         }
         sousRep = malloc(sizeof(rep)+sizeof(dirp->d_name));
-        sprintf(sousRep,"%s%s",rep,dirp->d_name);
+        sprintf(sousRep,"%s%s",rep,dirp->d_name); //range dans sousRep le chemin déjà connu + le nom du dossier/fichier actuel
+
 
         if(dirp->d_type == DT_DIR){ // si c'est un dossier
 
-          load(sousRep, l);
+          load(sousRep, l); //récursivité
 
         }else{ // si c'est un fichier
 
-          add(&(*l), sousRep);
+          add(&(*l), sousRep); //ajout dans la structure (fichier)
         }
       }
     }
