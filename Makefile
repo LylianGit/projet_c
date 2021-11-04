@@ -2,5 +2,9 @@
 %:%.c
 	gcc -Wall -o $@ $@.c -lm
 
-mylib:mylib/mylib.h makefile
-	cc mylib
+localiser : localiser.c
+	cc -o localiser localiser.c 
+
+treetest:treetest.c
+	cc -o treetest treetest.c -l mylib -L ./mylib
+
